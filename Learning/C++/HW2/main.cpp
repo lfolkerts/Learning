@@ -9,12 +9,13 @@ using namespace std;
 
 #define DEBUG
 
-void test_construction_node(Graph* g, const int ITER = 4, const int NODES_ADD = 10, const int NODES_SUB= 3);
+
+void test_construction_node(Graph* g, const int ITER = 4, const int NODES_ADD = 7, const int NODES_SUB= 3);
 void test_construction_edge(Graph* g, const int ITER, const int NODES, const int EDGE_ADD, const int EDGE_SUB);
 //mathematically calculate default args
-inline void test_construction_edge(Graph* g, const int ITER = 4, const int NODES=20)
+inline void test_construction_edge(Graph* g, const int ITER = 1, const int NODES=5)
 {
-	test_construction_edge(g,  ITER, NODES, NODES*NODES/10, NODES*NODES/20);
+	test_construction_edge(g,  ITER, NODES, NODES*NODES/5, NODES*NODES/10);
 }
 
 int main()
@@ -67,10 +68,7 @@ void test_construction_node(
 #ifdef DEBUG
 			cout << "Delete Node: " << id << " ";		
 #endif
-			string * del = g->deleteNode(id);
-			if(del != nullptr){ cout << *del << endl; }
-			else {cout << "Err" << endl; }
-			delete del;
+			g->deleteNode(id);
 		}
 
 #ifdef DEBUG
@@ -95,34 +93,38 @@ void test_construction_edge(Graph* g, const int ITER, const int NODES, const int
 	{
 		for(int j =0; j<EDGE_ADD; j++)
 		{
+			cout<<endl;
 			int num_nodes = g->getNumNodes();
 			if(num_nodes == 0) { cout << "Empty Graph" <<endl; return; }
 			src_id =  static_cast<uint32_t> (rand()%num_nodes);
 			dest_id = static_cast<uint32_t> (rand()%num_nodes);
 			weight = static_cast<weight_t> (rand() % static_cast<int>(WEIGHT_MAX-1));
-			cout<<endl;
 #ifdef DEBUG
 			cout << "ADD:: Src: " << src_id << "\tDest: " << setw(2) << dest_id << "\tWeight: " << static_cast<int>(weight);
 #endif	
 			err = g->addEdge(src_id, dest_id, DIR_ONEDIR, weight);
-			if(err != E_NONE){ printError(err); continue; }
-			cout << endl;
+			if(err != E_NONE){ printError(err); }
 		}
+#ifdef DEBUG
+		cout << endl << endl ;
+		g->printGraph() ;
+		cout << endl << endl ;
+#endif
 		
 		for(int j =0; j<EDGE_SUB; j++)
 		{
-			int num_nodes = g->getNumNodes();	
+			int num_nodes = g->getNumNodes() ;	
 			src_id = rand()%num_nodes;
 			dest_id = rand()%num_nodes;
-			weight = rand()% static_cast<int>(WEIGHT_MAX-1);
 #ifdef DEBUG
-			cout << "Delete:: Src: " << src_id << "\tDest: " << dest_id;
+			cout << "Delete:: Src: " << src_id << "\tDest: " << dest_id << endl;
 #endif	
-			err = (*g).deleteEdge(src_id, dest_id);
-			if(err != E_NONE){ printError(err); continue; }
-			cout <<endl;
+			err = g->deleteEdge(src_id, dest_id);
+			if(err != E_NONE){ printError(err); continue; } 
+#ifdef DEBUG
+			g->printGraph() ;
+			cout << endl << endl ;
+#endif
 		}
-		g->printGraph();
-		
 	}
 }

@@ -10,6 +10,7 @@ typedef enum ERR_T
 	E_NOMEM,
 	E_NO_SRC,
 	E_NO_DEST,
+	E_NO_EDGE,
 	E_BADGRAPH
 }ERR_T;
 
