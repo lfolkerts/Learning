@@ -11,7 +11,8 @@ using namespace std;
 typedef enum DIR_T
 {
 	DIR_BIDIR,
-	DIR_ONEDIR
+	DIR_ONEDIR,
+	DIR_NOT_VALID
 }DIR_T;
 
 typedef enum NEND_T //node end type
@@ -22,8 +23,9 @@ typedef enum NEND_T //node end type
 
 typedef string T_NodeData ;
 typedef uint8_t weight_t;
-
-const weight_t WEIGHT_MAX = 0xff;
+ 
+const weight_t NO_WEIGHT = 0xff ;
+const weight_t WEIGHT_MAX = (NO_WEIGHT-1);
 
 class Graph
 {
@@ -40,8 +42,8 @@ class Graph
 	void deleteNode(uint32_t id); //need to delete object in application
 	Node* findNode(uint32_t id); //can edit info via pointer
 	//graph construction - edges
-	ERR_T addEdge(uint32_t src, uint32_t dest, DIR_T direction=DIR_BIDIR, weight_t weight = WEIGHT_MAX);
-	ERR_T deleteEdge(uint32_t src, uint32_t dest);
+	ERR_T addEdge(uint32_t src, uint32_t dest, DIR_T direction=DIR_BIDIR, weight_t weight=NO_WEIGHT);
+	ERR_T deleteEdge(uint32_t src, uint32_t dest, DIR_T direction=DIR_NOT_VALID, weight_t weight=NO_WEIGHT);
 	ERR_T findEdge(uint32_t src, uint32_t dest) ;
 	//graph info
 	int getNumNodes();
@@ -89,6 +91,7 @@ class Graph::Edge
 	DIR_T getDir() ;
 	Node* getSrc() ;
 	Node* getDest() ;
+	weight_t getWeight() ;
 };//end Graph::Edge Class Declaration
 
 #endif

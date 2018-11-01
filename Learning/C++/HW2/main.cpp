@@ -10,10 +10,10 @@ using namespace std;
 #define DEBUG
 
 
-void test_construction_node(Graph* g, const int ITER = 4, const int NODES_ADD = 7, const int NODES_SUB= 3);
+void test_construction_node(Graph* g, const int ITER = 4, const int NODES_ADD = 20, const int NODES_SUB= 3);
 void test_construction_edge(Graph* g, const int ITER, const int NODES, const int EDGE_ADD, const int EDGE_SUB);
 //mathematically calculate default args
-inline void test_construction_edge(Graph* g, const int ITER = 1, const int NODES=5)
+inline void test_construction_edge(Graph* g, const int ITER = 4, const int NODES=20)
 {
 	test_construction_edge(g,  ITER, NODES, NODES*NODES/5, NODES*NODES/10);
 }

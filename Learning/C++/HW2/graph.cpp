@@ -58,8 +58,7 @@ void Graph::deleteNode(uint32_t id)
 ERR_T Graph::addEdge(uint32_t src_id, uint32_t dest_id,  DIR_T direction, weight_t weight)
 {
 	Node	*src, *dest;
-	//ERR_T err;
-
+	if (direction == DIR_NOT_VALID){ return E_NO_EDGE; }
 	src = findNode(src_id) ;
 	if(src == nullptr || src->getID()!=src_id){ return E_NO_SRC; }
 	dest = findNode(dest_id);
@@ -82,11 +81,11 @@ ERR_T Graph::addEdge(uint32_t src_id, uint32_t dest_id,  DIR_T direction, weight
 	return E_NONE;
 
 }
-ERR_T Graph::deleteEdge(uint32_t src_id, uint32_t dest_id)
+ERR_T Graph::deleteEdge(uint32_t src_id, uint32_t dest_id, DIR_T direction, weight_t weight)
 {
 	Node *src, *dest;
 	Edge *e_delete = nullptr ;
-	//find src nod
+	//find src node
 	src = findNode(src_id);
 	if(src == nullptr || src->getID() != src_id){ return E_NO_SRC ; }	
 	if(src->getEdges(NEND_EOUT).empty()) { return E_NO_EDGE ; }
@@ -96,19 +95,21 @@ ERR_T Graph::deleteEdge(uint32_t src_id, uint32_t dest_id)
 		if(e == nullptr){ continue ; }
 		
 		dest = e->getDest() ; 
-		if(dest != nullptr && dest->getID() == dest_id)
+		if(dest != nullptr && dest->getID() == dest_id &&
+		  (e->getDir() == direction || direction == DIR_NOT_VALID) &&
+		  (e->getWeight() == weight || weight == NO_WEIGHT))
 		{
-			cout << "\tEdge Found: " << dest_id ;
 			e_delete = e ;
 			break ;
 		}
 	}
-	if(e_delete == nullptr || dest->getID() != dest_id)
+	if(e_delete == nullptr)
 	{
 		return E_NO_EDGE ;
 	}
 	delete e_delete ;
-	cout << "\tDeleted Edge" << endl ;
+		//recursively delete any other edges that match this criteria
+	deleteEdge(src_id, dest_id, direction, weight) ;
 	return E_NONE ;	
 }
 
@@ -228,6 +229,9 @@ Graph::Node* Graph::Edge::getDest()
 {
 	return dest ;
 }
-
+weight_t Graph::Edge::getWeight()
+{
+	return weight ;
+}
 
 
